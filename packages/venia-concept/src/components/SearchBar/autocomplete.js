@@ -8,6 +8,9 @@ import SuggestedProducts from './suggestedProducts';
 
 import defaultClasses from './autocomplete.css';
 
+const suggestedCategoriesLimit = 4;
+const suggestedProductsLimit = 3;
+
 const searchAutocompleteQuery = gql`
     query($inputText: String) {
         products(search: $inputText) {
@@ -38,10 +41,7 @@ class SearchAutocomplete extends Component {
     createCategorySuggestions = items =>
         items
             .map(item => item.categories)
-            .reduce(
-                (allCategories, category) => allCategories.concat(category),
-                []
-            )
+            .reduce((categories, category) => categories.concat(category), [])
             .filter(
                 (category, index, categories) =>
                     categories.indexOf(category) === index
@@ -51,7 +51,7 @@ class SearchAutocomplete extends Component {
         const { searchQuery, classes } = this.props;
         const { createCategorySuggestions } = this;
 
-        if (!searchQuery) return null;
+        if (!searchQuery || searchQuery.length < 3) return null;
 
         return (
             <Query
@@ -61,8 +61,14 @@ class SearchAutocomplete extends Component {
                 }}
             >
                 {({ loading, error, data }) => {
-                    if (error) return <div>Data Fetch Error</div>;
-                    if (loading) return <div>Fetching Data</div>;
+                    if (error)
+                        return (
+                            <div className={classes.root}>Data Fetch Error</div>
+                        );
+                    if (loading)
+                        return (
+                            <div className={classes.root}>Fetching Data</div>
+                        );
 
                     const { items } = data.products;
 
@@ -76,9 +82,17 @@ class SearchAutocomplete extends Component {
                         <div className={classes.root}>
                             <SuggestedCategories
                                 searchQuery={searchQuery}
-                                categorySuggestions={categorySuggestions}
+                                categorySuggestions={categorySuggestions.slice(
+                                    0,
+                                    suggestedCategoriesLimit
+                                )}
                             />
-                            <SuggestedProducts items={data.products.items} />
+                            <SuggestedProducts
+                                items={data.products.items.slice(
+                                    0,
+                                    suggestedProductsLimit
+                                )}
+                            />
                         </div>
                     );
                 }}

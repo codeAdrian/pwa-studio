@@ -6,6 +6,11 @@
     grid-template-areas: 'image name price';
     grid-template-columns: 80px 1fr;
     grid-template-rows: min-content;
+    padding-bottom: 1rem;
+}
+
+.root:last-child {
+    padding-bottom: 0;
 }
 
 .image {
