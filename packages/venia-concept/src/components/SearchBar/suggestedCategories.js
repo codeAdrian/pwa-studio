@@ -1,9 +1,12 @@
 import React from 'react';
+import classify from 'src/classify';
 
-const SuggestedCategories = ({ searchQuery, categorySuggestions }) => (
-    <ul>
+import defaultClasses from './suggestedCategories.css';
+
+const SuggestedCategories = ({ classes, searchQuery, categorySuggestions }) => (
+    <ul className={classes.root}>
         {categorySuggestions.map(category => (
-            <li key={category.id}>
+            <li className={classes.item} key={category.id}>
                 <a href={category.url_key}>
                     <strong>{searchQuery}</strong> in {category.name}
                 </a>
@@ -12,4 +15,4 @@ const SuggestedCategories = ({ searchQuery, categorySuggestions }) => (
     </ul>
 );
 
-export default SuggestedCategories;
+export default classify(defaultClasses)(SuggestedCategories);

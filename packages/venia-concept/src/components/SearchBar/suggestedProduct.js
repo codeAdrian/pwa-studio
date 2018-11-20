@@ -1,13 +1,20 @@
 import React from 'react';
 import { Price } from '@magento/peregrine';
 import { makeProductMediaPath } from 'src/util/makeMediaPath';
+import classify from 'src/classify';
+
+import defaultClasses from './suggestedProduct.css';
 
 const productUrlSuffix = '.html';
 
-const suggestedProduct = ({ url_key, small_image, name, price }) => (
-    <li>
+const suggestedProduct = ({ classes, url_key, small_image, name, price }) => (
+    <li className={classes.root}>
         <a href={`/${url_key}${productUrlSuffix}`}>
-            <img alt={name} src={makeProductMediaPath(small_image)} />
+            <img
+                className={classes.image}
+                alt={name}
+                src={makeProductMediaPath(small_image)}
+            />
         </a>
         <a href={`/${url_key}${productUrlSuffix}`}>{name}</a>
         <a href={`/${url_key}${productUrlSuffix}`}>
@@ -19,4 +26,4 @@ const suggestedProduct = ({ url_key, small_image, name, price }) => (
     </li>
 );
 
-export default suggestedProduct;
+export default classify(defaultClasses)(suggestedProduct);

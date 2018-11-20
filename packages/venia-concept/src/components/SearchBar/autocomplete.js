@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
+
+import classify from 'src/classify';
 import SuggestedCategories from './suggestedCategories';
 import SuggestedProducts from './suggestedProducts';
+
+import defaultClasses from './autocomplete.css';
 
 const searchAutocompleteQuery = gql`
     query($inputText: String) {
@@ -44,7 +48,7 @@ class SearchAutocomplete extends Component {
             );
 
     render() {
-        const { searchQuery } = this.props;
+        const { searchQuery, classes } = this.props;
         const { createCategorySuggestions } = this;
 
         if (!searchQuery) return null;
@@ -69,7 +73,7 @@ class SearchAutocomplete extends Component {
                     );
 
                     return (
-                        <div>
+                        <div className={classes.root}>
                             <SuggestedCategories
                                 searchQuery={searchQuery}
                                 categorySuggestions={categorySuggestions}
@@ -83,4 +87,4 @@ class SearchAutocomplete extends Component {
     }
 }
 
-export default SearchAutocomplete;
+export default classify(defaultClasses)(SearchAutocomplete);
